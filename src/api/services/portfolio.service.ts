@@ -6,6 +6,12 @@ const profileService = {
 
     return data.data.data;
   },
+
+  sendMessage: async (message: any) => {
+    const messageData = await api.post("/messages/send", message);
+
+    return messageData;
+  },
 };
 
 export default profileService;
