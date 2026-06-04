@@ -59,7 +59,6 @@ export default function SkillsPage() {
         const categories = [...new Set(mocSkills.map((s) => s.category))];
         setExpandedCategories(new Set(categories));
       } catch (error) {
-        console.log(error);
         setSkills(mocSkills);
         const categories = [...new Set(mocSkills.map((s) => s.category))];
         setExpandedCategories(new Set(categories));

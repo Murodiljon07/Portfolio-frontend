@@ -135,7 +135,6 @@ export default function MessagePage() {
     try {
       const messageData = await profil.sendMessage(form);
       setSuccess(true);
-      console.log(messageData);
 
       // Save current time to localStorage after successful send
       saveMessageTime();
