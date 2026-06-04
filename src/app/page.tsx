@@ -38,6 +38,8 @@ export default function HomePage() {
       try {
         const data = await profil.getAdminMe();
         setMyProfil(data);
+
+        console.log(data);
       } catch (err) {
         console.error(err);
       }

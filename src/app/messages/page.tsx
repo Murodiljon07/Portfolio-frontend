@@ -32,12 +32,15 @@ export default function MessagePage() {
   const RATE_LIMIT_MINUTES = 30; // 30 daqiqa
   const STORAGE_KEY = "last_message_time";
 
+  const isBrowser = typeof window !== "undefined";
   // Check if user can send message
   const canSendMessage = (): {
     allowed: boolean;
     remainingMinutes?: number;
   } => {
-    const lastMessageTime = localStorage.getItem(STORAGE_KEY);
+    const lastMessageTime = isBrowser
+      ? localStorage.getItem(STORAGE_KEY)
+      : null;
 
     if (!lastMessageTime) {
       return { allowed: true };
@@ -340,14 +343,16 @@ export default function MessagePage() {
               </form>
 
               {/* Last message time indicator */}
-              {!rateLimitError && localStorage.getItem(STORAGE_KEY) && (
-                <div className="mt-4 pt-3 border-t border-white/10">
-                  <div className="flex justify-center text-[10px] text-white/20">
-                    ✓ Message sent recently — next message available in{" "}
-                    {RATE_LIMIT_MINUTES} minutes
+              {!rateLimitError &&
+                isBrowser &&
+                localStorage.getItem(STORAGE_KEY) && (
+                  <div className="mt-4 pt-3 border-t border-white/10">
+                    <div className="flex justify-center text-[10px] text-white/20">
+                      ✓ Message sent recently — next message available in{" "}
+                      {RATE_LIMIT_MINUTES} minutes
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Decorative Line */}
               <div className="mt-4 pt-3 border-t border-white/10">
