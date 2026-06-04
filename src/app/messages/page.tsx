@@ -27,39 +27,56 @@ export default function MessagePage() {
   const [error, setError] = useState(false);
   const [rateLimitError, setRateLimitError] = useState(false);
   const [remainingTime, setRemainingTime] = useState<number | null>(null);
+  const [isMounted, setIsMounted] = useState(false); // Mounted state
 
   // Rate limit constants
-  const RATE_LIMIT_MINUTES = 30; // 30 daqiqa
+  const RATE_LIMIT_MINUTES = 30;
   const STORAGE_KEY = "last_message_time";
 
-  const isBrowser = typeof window !== "undefined";
   // Check if user can send message
   const canSendMessage = (): {
     allowed: boolean;
     remainingMinutes?: number;
   } => {
-    const lastMessageTime = isBrowser
-      ? localStorage.getItem(STORAGE_KEY)
-      : null;
+    if (!isMounted) return { allowed: true }; // Default to allowed on server
 
-    if (!lastMessageTime) {
+    try {
+      const lastMessageTime = localStorage.getItem(STORAGE_KEY);
+
+      if (!lastMessageTime) {
+        return { allowed: true };
+      }
+
+      const lastTime = parseInt(lastMessageTime, 10);
+      const currentTime = Date.now();
+      const minutesPassed = (currentTime - lastTime) / (1000 * 60);
+
+      if (minutesPassed >= RATE_LIMIT_MINUTES) {
+        return { allowed: true };
+      }
+
+      const remainingMinutes = Math.ceil(RATE_LIMIT_MINUTES - minutesPassed);
+      return { allowed: false, remainingMinutes };
+    } catch (error) {
+      console.error("localStorage error:", error);
       return { allowed: true };
     }
+  };
 
-    const lastTime = parseInt(lastMessageTime, 10);
-    const currentTime = Date.now();
-    const minutesPassed = (currentTime - lastTime) / (1000 * 60);
-
-    if (minutesPassed >= RATE_LIMIT_MINUTES) {
-      return { allowed: true };
+  const saveMessageTime = () => {
+    if (!isMounted) return;
+    try {
+      const currentTime = Date.now();
+      localStorage.setItem(STORAGE_KEY, currentTime.toString());
+    } catch (error) {
+      console.error("Failed to save to localStorage:", error);
     }
-
-    const remainingMinutes = Math.ceil(RATE_LIMIT_MINUTES - minutesPassed);
-    return { allowed: false, remainingMinutes };
   };
 
   // Update remaining time every second
   useEffect(() => {
+    setIsMounted(true);
+
     const updateRemainingTime = () => {
       const { allowed, remainingMinutes } = canSendMessage();
       if (!allowed && remainingMinutes) {
@@ -75,7 +92,7 @@ export default function MessagePage() {
     const interval = setInterval(updateRemainingTime, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isMounted]); // Add isMounted to dependency
 
   // Clear success/error messages after 3 seconds
   useEffect(() => {
@@ -96,11 +113,6 @@ export default function MessagePage() {
       ...form,
       [e.target.name]: e.target.value,
     });
-  };
-
-  const saveMessageTime = () => {
-    const currentTime = Date.now();
-    localStorage.setItem(STORAGE_KEY, currentTime.toString());
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -156,8 +168,24 @@ export default function MessagePage() {
     return `${minutes} minutes`;
   };
 
-  if (loading) {
-    return <Loader fullScreen={true} text="Message sneding..." />;
+  // Get last message time for display (only on client)
+  const getLastMessageTime = () => {
+    if (!isMounted) return null;
+    try {
+      return localStorage.getItem(STORAGE_KEY);
+    } catch {
+      return null;
+    }
+  };
+
+  // Show loader only on initial mount
+  if (!isMounted || loading) {
+    return (
+      <Loader
+        fullScreen={true}
+        text={!isMounted ? "Loading..." : "Message sending..."}
+      />
+    );
   }
 
   return (
@@ -324,7 +352,7 @@ export default function MessagePage() {
                       className="flex items-center justify-center gap-2 text-green-400 text-xs bg-green-400/10 rounded-lg p-2"
                     >
                       <CheckCircle size={14} />
-                      Message sent successfully! I'll get back to you soon.
+                      Message sent successfully! I&apos;ll get back to you soon.
                     </motion.div>
                   )}
 
@@ -343,16 +371,14 @@ export default function MessagePage() {
               </form>
 
               {/* Last message time indicator */}
-              {!rateLimitError &&
-                isBrowser &&
-                localStorage.getItem(STORAGE_KEY) && (
-                  <div className="mt-4 pt-3 border-t border-white/10">
-                    <div className="flex justify-center text-[10px] text-white/20">
-                      ✓ Message sent recently — next message available in{" "}
-                      {RATE_LIMIT_MINUTES} minutes
-                    </div>
+              {!rateLimitError && isMounted && getLastMessageTime() && (
+                <div className="mt-4 pt-3 border-t border-white/10">
+                  <div className="flex justify-center text-[10px] text-white/20">
+                    ✓ Message sent recently — next message available in{" "}
+                    {RATE_LIMIT_MINUTES} minutes
                   </div>
-                )}
+                </div>
+              )}
 
               {/* Decorative Line */}
               <div className="mt-4 pt-3 border-t border-white/10">
