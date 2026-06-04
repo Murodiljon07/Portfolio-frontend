@@ -61,12 +61,12 @@ export default function HomePage() {
 
         <div className="flex justify-center gap-8 mt-8 flex-wrap">
           <div className="flex items-center gap-2 text-white/80">
-            <MapPin size={18} />
+            <MapPin size={18} className="text-red-600" />
             {myProfil.currentCity}
           </div>
 
           <div className="flex items-center gap-2 text-white/80">
-            <Briefcase size={18} />
+            <Briefcase size={18} className="text-yellow-800" />
             {myProfil.experience}
           </div>
         </div>
