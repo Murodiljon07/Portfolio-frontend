@@ -104,7 +104,6 @@ export default function HomePage() {
   }
 
   if (!myProfil) {
-    router.push("/404status");
     return;
   }
 
