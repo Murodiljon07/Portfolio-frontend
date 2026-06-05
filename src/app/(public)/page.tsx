@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import { MapPin, Briefcase, Sparkles, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 
 import Loader from "@/components/ui/loader";
@@ -73,8 +74,11 @@ const getSeasonalBackground = () => {
 };
 
 export default function HomePage() {
+  const router = useRouter();
   const [myProfil, setMyProfil] = useState<Profile | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const [loading, setLoading] = useState<Boolean>(true);
   const { scrollYProgress } = useScroll();
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0.3]);
 
@@ -87,14 +91,21 @@ export default function HomePage() {
         setMyProfil(data);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchMe();
   }, []);
 
-  if (!myProfil) {
+  if (loading) {
     return <Loader fullScreen={true} />;
+  }
+
+  if (!myProfil) {
+    router.push("/404status");
+    return;
   }
 
   // Floating particles for hero

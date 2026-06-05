@@ -4,7 +4,7 @@ const profileService = {
   getAdminMe: async () => {
     const data = await api.get("admin/me");
 
-    return data.data.data;
+    return data.data;
   },
 
   sendMessage: async (message: any) => {

@@ -34,6 +34,7 @@ function layout({ children }: { children: ReactNode }) {
             CV
           </span>
         </a>
+
         <NavBar />
 
         <main className="h-[calc(100vh-80px)]">{children}</main>
