@@ -15,7 +15,7 @@ import {
   CheckCircle,
   Fingerprint,
 } from "lucide-react";
-import axios from "axios";
+import { auth } from "@/api/services/auth.service";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,22 +29,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  // API base URL
-  const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-
-  // Clear error after 3 seconds
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    if (error) {
-      timeout = setTimeout(() => {
-        setError(false);
-        setErrorMessage("");
-      }, 3000);
-    }
-    return () => clearTimeout(timeout);
-  }, [error]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
@@ -60,27 +44,11 @@ export default function LoginPage() {
     setErrorMessage("");
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/login`, {
-        email: form.email,
-        password: form.password,
-        secondPassword: form.secondPassword,
-      });
+      const data = await auth.login(form);
 
-      if (response.data.token) {
-        // Save token and admin data
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("admin", JSON.stringify(response.data.admin));
-        localStorage.setItem("isAuthenticated", "true");
-
-        // Redirect to admin panel or dashboard
-        router.push("/admin");
-      }
-    } catch (err: any) {
-      console.error("Login error:", err);
-      setError(true);
-      setErrorMessage(
-        err.response?.data?.error || "Invalid credentials. Please try again.",
-      );
+      router.push("/admin");
+    } catch (error) {
+      console.log(error);
     } finally {
       setLoading(false);
     }

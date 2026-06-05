@@ -214,7 +214,7 @@ export default function ProjectsPage() {
         >
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <span className="text-[10px] sm:text-xs text-white/40 font-medium">
-              Carousel.app
+              Projects.app
             </span>
             <div className="w-12" />
           </div>
