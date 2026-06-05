@@ -16,6 +16,16 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 import Loader from "@/components/ui/loader";
+import {
+  FaFolder,
+  FaGithub,
+  FaInstagram,
+  FaLinkedin,
+  FaPhone,
+  FaTelegram,
+  FaYoutube,
+} from "react-icons/fa6";
+import { FaLinkedinIn } from "react-icons/fa";
 
 interface Profile {
   name: string;
@@ -27,7 +37,7 @@ interface Profile {
   experience: string;
   avatar?: string;
   email?: string;
-  media?: Array<{ platform: string; url: string }>;
+  media?: Array<{ platform: string; url: string; title: string }>;
 }
 
 export default function HomePage() {
@@ -38,6 +48,8 @@ export default function HomePage() {
       try {
         const data = await profil.getAdminMe();
         setMyProfil(data);
+
+        console.log(data);
       } catch (err) {
         console.error(err);
       }
@@ -159,24 +171,54 @@ export default function HomePage() {
             className="flex justify-center gap-3 sm:gap-4 mt-8 sm:mt-10"
           >
             {myProfil.media.map((social, i) => {
-              const Icon =
-                social.platform === "github"
-                  ? GitBranchIcon
-                  : social.platform === "linkedin"
-                    ? Library
-                    : social.platform === "email"
-                      ? Mail
-                      : Phone;
+              const { platform, url, title } = social;
+
+              let Icon = FaFolder;
+
+              const p = platform.toLocaleLowerCase();
+
+              switch (p) {
+                case "youtube":
+                  Icon = FaYoutube;
+                  break;
+
+                case "github":
+                  Icon = FaGithub;
+                  break;
+
+                case "linkedin":
+                  Icon = FaLinkedinIn;
+                  break;
+
+                case "phone":
+                  Icon = FaPhone;
+                  break;
+
+                case "instagram":
+                  Icon = FaInstagram;
+                  break;
+
+                case "telegram":
+                  Icon = FaTelegram;
+                  break;
+
+                default:
+                  break;
+              }
               return (
-                <a
+                <Link
                   key={i}
-                  href={social.url}
+                  href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full bg-white/10 p-2 sm:p-2.5 hover:bg-white/20 transition-all hover:scale-110"
+                  className="group rounded-full flex justify-center items-center gap-2 bg-white/10 p-2  hover:bg-white/20 duration-500 transition-all hover:scale-110 "
                 >
-                  <Icon size={16} className="text-white sm:text-lg" />
-                </a>
+                  <Icon size={20} className="text-white  " />
+
+                  <span className="absolute -bottom-5 text-amber-50 max-w-0 group-hover:max-w-xs opacity-0 group-hover:opacity-100 whitespace-nowrap overflow-hidden  transition-all duration-500 ease-in-out">
+                    {title}
+                  </span>
+                </Link>
               );
             })}
           </motion.div>

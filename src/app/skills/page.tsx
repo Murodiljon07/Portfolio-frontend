@@ -55,7 +55,7 @@ export default function SkillsPage() {
     const fetchSkills = async () => {
       try {
         const data = await profil.getAdminMe();
-        setSkills(mocSkills);
+        setSkills(data.skills);
         const categories = [...new Set(mocSkills.map((s) => s.category))];
         setExpandedCategories(new Set(categories));
       } catch (error) {
@@ -117,11 +117,6 @@ export default function SkillsPage() {
         >
           {/* Window Title Bar Style */}
           <div className="flex items-center justify-between mb-3 sm:mb-4">
-            <div className="flex gap-1.5">
-              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500/80" />
-              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500/80" />
-              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-500/80" />
-            </div>
             <span className="text-[10px] sm:text-xs text-white/40 font-medium">
               Skills.app
             </span>

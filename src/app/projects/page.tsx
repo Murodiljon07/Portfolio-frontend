@@ -91,7 +91,7 @@ export default function ProjectsPage() {
     const fetchProjects = async () => {
       try {
         const data = await profil.getAdminMe();
-        setProjects(demoprojects);
+        setProjects(data.projects);
       } catch (error) {
         console.error(error);
         setProjects(demoprojects);
@@ -191,7 +191,7 @@ export default function ProjectsPage() {
     setIsAutoPlaying(!isAutoPlaying);
   };
 
-  if (projects.length === 0) {
+  if (!projects) {
     return <Loader fullScreen={true} text="Projects..." />;
   }
 
@@ -239,38 +239,44 @@ export default function ProjectsPage() {
           onClick={handleUserInteraction}
         >
           {/* Navigation Arrows */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              prevSlide();
-              handleUserInteraction();
-            }}
-            className="absolute left-2 sm:left-4 z-20 p-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/70 hover:text-white hover:bg-white/20 transition-all z-30"
-          >
-            <ChevronLeft size={20} />
-          </button>
+          {projects.length > 1 ? (
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevSlide();
+                  handleUserInteraction();
+                }}
+                className="absolute left-2 sm:left-4 z-20 p-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/70 hover:text-white hover:bg-white/20 transition-all z-30"
+              >
+                <ChevronLeft size={20} />
+              </button>
 
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              nextSlide();
-              handleUserInteraction();
-            }}
-            className="absolute right-2 sm:right-4 z-20 p-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/70 hover:text-white hover:bg-white/20 transition-all z-30"
-          >
-            <ChevronRight size={20} />
-          </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextSlide();
+                  handleUserInteraction();
+                }}
+                className="absolute right-2 sm:right-4 z-20 p-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/70 hover:text-white hover:bg-white/20 transition-all z-30"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </>
+          ) : null}
 
           {/* Play/Pause Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleAutoPlay();
-            }}
-            className="absolute top-0 right-2 sm:right-4 z-20 p-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/50 hover:text-white/80 transition-all"
-          >
-            {isAutoPlaying ? <Pause size={12} /> : <Play size={12} />}
-          </button>
+          {projects.length !== 0 ? (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleAutoPlay();
+              }}
+              className="absolute top-0 right-2 sm:right-4 z-20 p-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/50 hover:text-white/80 transition-all"
+            >
+              {isAutoPlaying ? <Pause size={12} /> : <Play size={12} />}
+            </button>
+          ) : null}
 
           {/* Carousel Container */}
           <div className="relative w-full max-w-5xl h-[400px] sm:h-[450px] md:h-[500px] flex items-center justify-center">
