@@ -104,7 +104,7 @@ export default function HomePage() {
   }
 
   if (!myProfil) {
-    return;
+    return <div>ERORR</div>;
   }
 
   // Floating particles for hero
