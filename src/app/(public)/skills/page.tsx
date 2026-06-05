@@ -20,29 +20,6 @@ interface Skill {
 }
 
 // Mock data with categories
-const mocSkills: Skill[] = [
-  // Frontend
-  { name: "React", logo: "⚛️", proficiency: 92, category: "Frontend" },
-  { name: "Next.js", logo: "▲", proficiency: 88, category: "Frontend" },
-  { name: "TypeScript", logo: "📘", proficiency: 85, category: "Frontend" },
-  { name: "Tailwind", logo: "🎨", proficiency: 90, category: "Frontend" },
-  { name: "Framer Motion", logo: "🎬", proficiency: 82, category: "Frontend" },
-
-  // Backend
-  { name: "Node.js", logo: "⚡", proficiency: 89, category: "Backend" },
-  { name: "Express", logo: "🚀", proficiency: 86, category: "Backend" },
-  { name: "NestJS", logo: "🪹", proficiency: 78, category: "Backend" },
-
-  // Database
-  { name: "MongoDB", logo: "🍃", proficiency: 85, category: "Database" },
-  { name: "PostgreSQL", logo: "🐘", proficiency: 80, category: "Database" },
-  { name: "Redis", logo: "🔴", proficiency: 75, category: "Database" },
-
-  // DevOps
-  { name: "Docker", logo: "🐳", proficiency: 82, category: "DevOps" },
-  { name: "Kubernetes", logo: "⎈", proficiency: 70, category: "DevOps" },
-  { name: "GitHub Actions", logo: "⚙️", proficiency: 78, category: "DevOps" },
-];
 
 export default function SkillsPage() {
   const [skills, setSkills] = useState<Skill[]>([]);
@@ -56,13 +33,9 @@ export default function SkillsPage() {
       try {
         const data = await profil.getAdminMe();
         setSkills(data.skills);
-        const categories = [...new Set(mocSkills.map((s) => s.category))];
+        const categories = [...new Set(skills.map((s) => s.category))];
         setExpandedCategories(new Set(categories));
-      } catch (error) {
-        setSkills(mocSkills);
-        const categories = [...new Set(mocSkills.map((s) => s.category))];
-        setExpandedCategories(new Set(categories));
-      }
+      } catch (error) {}
     };
 
     fetchSkills();

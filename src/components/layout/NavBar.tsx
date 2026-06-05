@@ -28,7 +28,7 @@ function NavBar() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-2 left-1/2 -translate-x-1/2 z-50">
+    <nav className="fixed bottom-3 -right-6 -translate-x-1/2 z-50">
       {/* DOCK */}
       <div className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg ">
         {/* Avatar */}

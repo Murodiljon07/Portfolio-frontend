@@ -46,9 +46,10 @@ export default function LoginPage() {
     try {
       const data = await auth.login(form);
 
+      localStorage.setItem("token", JSON.stringify(data.token));
+
       router.push("/admin");
     } catch (error) {
-      console.log(error);
     } finally {
       setLoading(false);
     }

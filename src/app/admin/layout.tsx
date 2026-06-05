@@ -1,7 +1,11 @@
-import React, { ReactNode } from "react";
+import React from "react";
 
-function layout({ children }: { children: ReactNode }) {
-  return <div>{children}</div>;
+function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <main>{children}</main>
+    </>
+  );
 }
 
-export default layout;
+export default AdminLayout;

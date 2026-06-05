@@ -26,59 +26,6 @@ interface Project {
   createdAt?: string;
 }
 
-const demoprojects: Project[] = [
-  {
-    _id: "1",
-    title: "IELTS Platform",
-    description:
-      "AI powered IELTS prediction platform with real-time scoring and personalized feedback system.",
-    githubUrl: "https://github.com/...",
-    liveUrl: "https://demo.com",
-    image: "",
-    technologies: ["React", "Node.js", "AI", "MongoDB"],
-  },
-  {
-    _id: "2",
-    title: "E-Commerce Store",
-    description:
-      "Full-stack e-commerce platform with payment integration and admin dashboard.",
-    githubUrl: "https://github.com/...",
-    liveUrl: "https://demo.com",
-    image: "",
-    technologies: ["Next.js", "Stripe", "PostgreSQL", "Tailwind"],
-  },
-  {
-    _id: "3",
-    title: "Portfolio 2024",
-    description:
-      "Modern portfolio website with macOS style design and smooth animations.",
-    githubUrl: "https://github.com/...",
-    liveUrl: "https://demo.com",
-    image: "",
-    technologies: ["Next.js", "Framer Motion", "Tailwind", "TypeScript"],
-  },
-  {
-    _id: "4",
-    title: "Task Manager",
-    description:
-      "Collaborative task management tool with real-time updates and team features.",
-    githubUrl: "https://github.com/...",
-    liveUrl: "https://demo.com",
-    image: "",
-    technologies: ["Vue.js", "Firebase", "Tailwind"],
-  },
-  {
-    _id: "5",
-    title: "Weather App",
-    description:
-      "Beautiful weather application with 7-day forecast and interactive maps.",
-    githubUrl: "https://github.com/...",
-    liveUrl: "https://demo.com",
-    image: "",
-    technologies: ["React", "API", "Chart.js"],
-  },
-];
-
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -92,10 +39,7 @@ export default function ProjectsPage() {
       try {
         const data = await profil.getAdminMe();
         setProjects(data.projects);
-      } catch (error) {
-        console.error(error);
-        setProjects(demoprojects);
-      }
+      } catch (error) {}
     };
     fetchProjects();
   }, []);
