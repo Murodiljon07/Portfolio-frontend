@@ -31,8 +31,9 @@ export default function SkillsPage() {
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const data = await profil.getAdminMe();
-        setSkills(data.skills);
+        const data = await profil.skills();
+
+        setSkills(data.data);
         const categories = [...new Set(skills.map((s) => s.category))];
         setExpandedCategories(new Set(categories));
       } catch (error) {}
@@ -281,34 +282,6 @@ export default function SkillsPage() {
           </div>
         </motion.div>
       </div>
-
-      {/* Custom Scrollbar Styles */}
-      <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.03);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.15);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.25);
-        }
-
-        /* Extra small screens (below 480px) */
-        @media (min-width: 480px) {
-          .xs\\:grid-cols-3 {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-          }
-          .xs\\:inline {
-            display: inline;
-          }
-        }
-      `}</style>
     </section>
   );
 }

@@ -18,6 +18,12 @@ const profileService = {
 
     return projectsData.data;
   },
+
+  skills: async () => {
+    const skillsData = await api.get("/skills");
+
+    return skillsData.data;
+  },
 };
 
 export default profileService;
