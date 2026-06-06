@@ -37,7 +37,9 @@ export default function ProjectsPage() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const data = await profil.getAdminMe();
+        const data = await profil.projects();
+        console.log(data);
+
         setProjects(data.projects);
       } catch (error) {}
     };
@@ -283,22 +285,13 @@ export default function ProjectsPage() {
                   >
                     {/* Image Section */}
                     <div className="relative h-36 sm:h-40 md:h-44 bg-gradient-to-br from-white/10 to-white/0 overflow-hidden">
-                      {project.image ? (
-                        <Image
-                          src={project.image}
-                          alt={project.title}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center h-full">
-                          <div className="text-4xl opacity-30">
-                            {project.title.charAt(0)}
-                          </div>
+                      (
+                      <div className="flex items-center justify-center h-full">
+                        <div className="text-4xl opacity-30">
+                          {project.title.charAt(0)}
                         </div>
-                      )}
-
-                      {/* Tech Badge */}
+                      </div>
+                      ){/* Tech Badge */}
                       <div className="absolute top-2 right-2">
                         <span className="text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded-full bg-black/50 backdrop-blur-sm text-white/80">
                           {project.technologies[0]}
@@ -428,7 +421,7 @@ export default function ProjectsPage() {
         </motion.div>
       </div>
 
-      <style jsx>{`
+      {/* <style jsx>{`
         .line-clamp-2 {
           display: -webkit-box;
           -webkit-line-clamp: 2;
@@ -439,7 +432,7 @@ export default function ProjectsPage() {
         .bg-white\/8 {
           background-color: rgba(255, 255, 255, 0.08);
         }
-      `}</style>
+      `}</style> */}
     </section>
   );
 }

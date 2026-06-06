@@ -12,6 +12,12 @@ const profileService = {
 
     return messageData;
   },
+
+  projects: async () => {
+    const projectsData = await api.get("/projects");
+
+    return projectsData.data;
+  },
 };
 
 export default profileService;

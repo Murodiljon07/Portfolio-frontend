@@ -6,7 +6,7 @@ import "./index.css";
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body cz-shortcut-listen="true">{children}</body>
     </html>
   );
 }
